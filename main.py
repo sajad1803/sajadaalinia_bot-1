@@ -1,23 +1,14 @@
-try:
-    from config import (
-        TELEGRAM_BOT_TOKEN,
-        ADMIN_CHAT_ID,
-        HYPERLIQUID_RPC_URL,
-        EXAMPLE_TRADER
-    )
-except ImportError:
-    import os
-    TELEGRAM_BOT_TOKEN = os.environ.get('7985465680:AAFiF33QrTH1wHoMtS7xrjfyGy3mFRL8SZs')
-    ADMIN_CHAT_ID = int(os.environ.get('6847562554'))
-    HYPERLIQUID_RPC_URL = os.environ.get('https://api.hyperliquid.xyz')
-    EXAMPLE_TRADER = os.environ.get('0x8e80c4b533dd977cf716b5c24fd9223129272804')
 import os
 import threading
 import time
 from telegram import Update
 from telegram.ext import Updater, CommandHandler
-from web3 import Web3
-from config import TELEGRAM_BOT_TOKEN, ADMIN_CHAT_ID, HYPERLIQUID_RPC_URL, EXAMPLE_TRADER
+
+# تنظیمات اصلی (اولویت با متغیرهای محیطی)
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '7985465680:AAFiF33QrTH1wHoMtS7xrjfyGy3mFRL8SZs')
+ADMIN_CHAT_ID = int(os.getenv('ADMIN_CHAT_ID', '6847562554'))
+HYPERLIQUID_RPC_URL = os.getenv('HYPERLIQUID_RPC_URL', 'https://api.hyperliquid.xyz')
+EXAMPLE_TRADER = os.getenv('EXAMPLE_TRADER', '0x8e80c4b533dd977cf716b5c24fd9223129272804')
 
 class HyperliquidMonitor:
     def __init__(self):
@@ -30,10 +21,10 @@ class HyperliquidMonitor:
                 'trader': EXAMPLE_TRADER,
                 'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
                 'entry_price': round(28500 + (time.time() % 1000), 2),
-                'stop_loss': 28000,
-                'take_profit': 29500,
+                'stop_loss': 28000.00,
+                'take_profit': 29500.00,
                 'direction': 'long' if int(time.time()) % 2 == 0 else 'short',
-                'size': 1500,
+                'size': 1500.00,
                 'nickname': 'Sample-Trader'
             }
             time.sleep(30)
@@ -44,10 +35,15 @@ class TelegramBot:
         self.updater.dispatcher.add_handler(CommandHandler('start', self.start))
         
     def start(self, update: Update, context):
-        update.message.reply_text('🤖 Hyperliquid Trade Bot Active!')
+        update.message.reply_text('🤖 ربات Hyperliquid فعال است!')
 
     def send_alert(self, chat_id, trade_info):
-        msg = f"🚨 New Trade\n📊 Size: ${trade_info['size']:,.2f}\n💰 Price: {trade_info['entry_price']}"
+        msg = (
+            f"🚨 معامله جدید\n"
+            f"👤 تریدر: {trade_info['nickname']}\n"
+            f"💰 قیمت: {trade_info['entry_price']}\n"
+            f"📊 حجم: ${trade_info['size']:,.2f}"
+        )
         self.updater.bot.send_message(chat_id=chat_id, text=msg)
 
     def run(self):
@@ -63,5 +59,3 @@ if __name__ == "__main__":
     
     for trade in monitor.check_trades():
         bot.send_alert(ADMIN_CHAT_ID, trade)
-        import pkg_resources  # این خط را اضافه کنید
-from web3 import Web3
