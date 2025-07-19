@@ -50,3 +50,5 @@ if __name__ == "__main__":
     
     for trade in monitor.check_trades():
         bot.send_alert(ADMIN_CHAT_ID, trade)
+        import pkg_resources  # این خط را اضافه کنید
+from web3 import Web3
