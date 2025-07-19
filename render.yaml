@@ -2,16 +2,14 @@ services:
   - type: web
     name: hyperliquid-bot
     runtime: python
-    buildCommand: |
-      pip install --upgrade pip
-      pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: python main.py
     envVars:
-      - key: TELEGRAM_BOT_TOKEN
+      - key: TELEGRAM_TOKEN
         value: "7985465680:AAFiF33QrTH1wHoMtS7xrjfyGy3mFRL8SZs"
       - key: ADMIN_CHAT_ID
         value: "6847562554"
-      - key: HYPERLIQUID_RPC_URL
+      - key: HYPERLIQUID_RPC
         value: "https://api.hyperliquid.xyz"
-      - key: EXAMPLE_TRADER
+      - key: EXAMPLE_WALLET
         value: "0x8e80c4b533dd977cf716b5c24fd9223129272804"
