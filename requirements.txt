@@ -1,5 +1,5 @@
-setuptools==68.2.2
-web3==6.15.0
 python-telegram-bot==20.3
+web3==6.4.0
 python-dotenv==1.0.0
 flask==2.2.3
+setuptools==68.2.2
