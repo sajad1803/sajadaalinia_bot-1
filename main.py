@@ -1,3 +1,16 @@
+try:
+    from config import (
+        TELEGRAM_BOT_TOKEN,
+        ADMIN_CHAT_ID,
+        HYPERLIQUID_RPC_URL,
+        EXAMPLE_TRADER
+    )
+except ImportError:
+    import os
+    TELEGRAM_BOT_TOKEN = os.environ.get('7985465680:AAFiF33QrTH1wHoMtS7xrjfyGy3mFRL8SZs')
+    ADMIN_CHAT_ID = int(os.environ.get('6847562554'))
+    HYPERLIQUID_RPC_URL = os.environ.get('https://api.hyperliquid.xyz')
+    EXAMPLE_TRADER = os.environ.get('0x8e80c4b533dd977cf716b5c24fd9223129272804')
 import os
 import threading
 import time
