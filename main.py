@@ -2,9 +2,10 @@ import os
 import threading
 import time
 from telegram import Update
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, CallbackContext
+from web3 import Web3
 
-# تنظیمات اصلی (اولویت با متغیرهای محیطی)
+# تنظیمات اصلی
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '7985465680:AAFiF33QrTH1wHoMtS7xrjfyGy3mFRL8SZs')
 ADMIN_CHAT_ID = int(os.getenv('ADMIN_CHAT_ID', '6847562554'))
 HYPERLIQUID_RPC_URL = os.getenv('HYPERLIQUID_RPC_URL', 'https://api.hyperliquid.xyz')
@@ -31,10 +32,11 @@ class HyperliquidMonitor:
 
 class TelegramBot:
     def __init__(self, token):
-        self.updater = Updater(token=token)
+        # تغییر اصلی: استفاده از روش جدید مقداردهی Updater
+        self.updater = Updater(token, use_context=True)
         self.updater.dispatcher.add_handler(CommandHandler('start', self.start))
         
-    def start(self, update: Update, context):
+    def start(self, update: Update, context: CallbackContext):
         update.message.reply_text('🤖 ربات Hyperliquid فعال است!')
 
     def send_alert(self, chat_id, trade_info):
